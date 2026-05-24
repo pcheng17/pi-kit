@@ -44,7 +44,7 @@ The code review skill uses the `subagent` extension to run focused review agents
 git init
 git add .
 git commit -m "Initial pi-kit"
-git remote add origin git@github.com:pcheng/pi-kit.git
+git remote add origin git@github.com:pcheng17/pi-kit.git
 git push -u origin main
 ```
 
