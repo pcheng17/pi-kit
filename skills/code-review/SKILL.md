@@ -34,7 +34,7 @@ Infer the target from the user's request:
 - **Commit/range**: use `git show <commit>` or `git diff <range>`.
 - **Explicit files**: review only those files/diffs.
 
-Do not run mutating commands during review. Do not edit files unless the user explicitly asks for fixes after the review.
+Do not edit files unless the user explicitly asks for fixes after the review. Keep the inspection phase read-only. For PR targets, posting review comments to the PR after synthesis is the only allowed mutating action and is expected unless the user explicitly asks not to post.
 
 ## Subagent Workflow
 
@@ -99,6 +99,25 @@ Prioritize findings by severity and confidence:
 
 Merge duplicates across subagents. Prefer definite bugs over speculation. Mention uncertainty when a finding depends on assumptions.
 
+## PR Commenting Workflow
+
+When the review target is a GitHub PR or the user provides a PR number/URL, post the synthesized review to the PR and also report the same findings back to the user.
+
+1. Confirm the PR metadata with read-only commands such as `gh pr view <pr> --json number,title,headRefOid,baseRefName,headRefName,url`.
+2. Decide which synthesized comments should be inline:
+   - Use inline comments for actionable findings with a precise changed-file line location in the PR diff.
+   - Use the review body for summary, test plan, findings without a changed-line location, and any "no blocking issues" note.
+   - Do not create duplicate general and inline comments for the same issue; reference inline comments briefly from the review body if helpful.
+3. Prefer one GitHub review containing all inline comments plus a body. Use `gh api` to create a pending/submitted review when inline comments are needed:
+   - `POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews`
+   - Include `commit_id` from `headRefOid`, `event: "COMMENT"`, `body`, and `comments` entries with `path`, `line`, `side: "RIGHT"`, and `body`.
+   - Only inline-comment on lines present in the PR diff. If a finding points to a base-only or unchanged line, put it in the review body instead.
+4. If no inline comments are needed, post a single PR review or PR comment with the synthesized body, for example `gh pr review <pr> --comment --body-file <file>` or `gh pr comment <pr> --body-file <file>`.
+5. If posting fails because of authentication, permissions, missing `gh`, or unavailable diff position, do not retry destructively. Report the failure to the user and include the exact comments that would have been posted.
+6. Avoid reposting duplicate comments in the same run. If the user asks for a re-review, post only the current synthesized comments.
+
+Keep subagents read-only; the coordinator performs PR posting after synthesis. Do not post raw subagent output.
+
 ## Final Output Format
 
 ```markdown
@@ -115,6 +134,10 @@ Merge duplicates across subagents. Prefer definite bugs over speculation. Mentio
 - Existing coverage observed: ...
 - Suggested tests or commands: ...
 
+## PR Comments
+- Posted: yes/no/not applicable
+- Inline comments: count and brief description, or why none were posted
+
 ## Summary
 One short paragraph with overall risk and whether there are blockers.
 ```
@@ -123,6 +146,10 @@ If no meaningful findings exist:
 
 ```markdown
 No blocking issues found.
+
+## PR Comments
+- Posted: yes/no/not applicable
+- Inline comments: count and brief description, or why none were posted
 
 ## Notes
 - Any minor suggestions or test plan items.
