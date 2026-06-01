@@ -38,6 +38,19 @@ The code review skill uses the `subagent` extension to run focused review agents
 - `review-maintainability`
 - `review-performance`
 
+## C++ review/fix loop
+
+```text
+/skill:cpp-review-fix-loop review and fix my current C++ changes
+/skill:cpp-review-fix-loop review branch main...HEAD and iterate until approved
+/skill:cpp-review-fix-loop address unresolved C++ PR comments on PR 123
+```
+
+The C++ loop coordinates two package agents:
+
+- `cpp-reviewer` - read-only C++ reviewer piggybacking on the broad `code-review` dimensions. For PR targets, it recommends when findings/notes should be posted and the coordinator posts them.
+- `cpp-author` - scoped editor that fixes reviewer findings and runs focused verification. In PR comment mode, it creates one commit per addressed thread, pushes it, and replies with the commit link.
+
 ## Version control
 
 ```bash
