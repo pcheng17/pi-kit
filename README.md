@@ -7,6 +7,7 @@ Personal Pi extensions, skills, and subagents.
 - `extensions/` - Pi TypeScript extensions.
 - `skills/` - Pi skills.
 - `agents/` - Subagent prompts used by the bundled `subagent` extension.
+- `pi-mcp-adapter` - Bundled Pi MCP extension, loaded from `node_modules`.
 
 ## Install locally
 
@@ -21,6 +22,8 @@ Then reload Pi:
 ```
 
 Local package installs reference this directory in `~/.pi/agent/settings.json`; files are not copied. New skills/extensions are picked up after `/reload`.
+
+After cloning this repo on a new machine, run `npm install` here before `pi install /path/to/pi-kit` so bundled `node_modules` extensions such as `pi-mcp-adapter` are available.
 
 ## Code review workflow
 
