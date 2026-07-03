@@ -1,6 +1,6 @@
 ---
 name: address-pr-comments
-description: Resolves unresolved GitHub PR review comment threads by reading each full thread, implementing agreed changes, committing each thread separately, pushing, and replying with commit links. Use when asked to address PR comments, review feedback, or unresolved PR threads.
+description: Resolves unresolved GitHub PR review comment threads by reading each full thread, implementing agreed changes, committing each thread separately, pushing once after all commits are made, and replying with commit links. Use when asked to address PR comments, review feedback, or unresolved PR threads.
 ---
 
 # Address PR Comments
@@ -14,8 +14,8 @@ Use this skill when the user asks you to address, fix, resolve, or respond to co
 - If the thread reaches a clear implementation decision, implement that decision.
 - If the expected implementation is ambiguous, blocked, contradictory, or requires product/design judgment, ask the user for clarification before changing code for that thread.
 - Create one separate commit per addressed comment thread. Do not combine unrelated threads into one commit.
-- Push each commit after creating it.
-- After each push, reply to that PR thread with a link to the commit using its SHA so reviewers can reference the exact change.
+- Do not push after each commit. Push only once, after all planned per-thread commits have been created, to avoid triggering GitHub Actions/CI separately for each code-changing commit and to be mindful of CI usage.
+- After the single push, reply to each addressed PR thread with a link to its commit using its SHA so reviewers can reference the exact change.
 
 ## Preconditions
 
@@ -116,8 +116,18 @@ Process threads one at a time. Keep exactly one thread in progress.
      git rev-parse HEAD
      ```
 
-6. **Push the commit**
-   - Push the current branch:
+6. **Record the commit for later push/reply**
+   - Do not push yet.
+   - Record the thread URL/ID, commit SHA, validation command, and intended reply text so you can reply after the final push.
+
+7. **Move to the next unresolved thread**
+   - Refresh thread status if needed, especially after user clarification or if reviewers are active.
+   - Never include changes for the next thread in the previous thread's commit.
+
+## After All Thread Commits Are Ready
+
+1. **Push all commits once**
+   - Push the current branch only after all planned per-thread commits have been created. Each push with code changes can trigger GitHub Actions/CI, so batching the push saves CI time and keeps usage mindful:
      ```bash
      git push
      ```
@@ -126,8 +136,8 @@ Process threads one at a time. Keep exactly one thread in progress.
      git push -u origin HEAD
      ```
 
-7. **Reply to the thread with the commit link**
-   - Build a commit URL from the PR/repo URL and full SHA, e.g. `https://github.com/OWNER/REPO/commit/FULL_SHA`.
+2. **Reply to each addressed thread with its commit link**
+   - Build a commit URL from the PR/repo URL and each full SHA, e.g. `https://github.com/OWNER/REPO/commit/FULL_SHA`.
    - Reply directly to the review thread, not as a top-level PR comment.
    - Use a short reply such as:
      ```markdown
@@ -146,10 +156,6 @@ Process threads one at a time. Keep exactly one thread in progress.
      ```bash
      gh api -X POST /repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_DATABASE_ID/replies -f body='Addressed in https://github.com/OWNER/REPO/commit/FULL_SHA (`FULL_SHA`).'
      ```
-
-8. **Move to the next unresolved thread**
-   - Refresh thread status if needed, especially after user clarification or if reviewers are active.
-   - Never include changes for the next thread in the previous thread's commit.
 
 ## Clarification Guidance
 
