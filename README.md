@@ -4,7 +4,7 @@ Personal Pi extensions, skills, and subagents.
 
 ## Contents
 
-- `extensions/` - Pi TypeScript extensions.
+- `extensions/` - Pi TypeScript extensions, including automatic session context summaries.
 - `skills/` - Pi skills.
 - `agents/` - Subagent prompts used by the bundled `subagent` extension.
 - `pi-mcp-adapter` - Bundled Pi MCP extension, loaded from `node_modules`.
@@ -12,7 +12,7 @@ Personal Pi extensions, skills, and subagents.
 ## Install locally
 
 ```bash
-pi install /Users/pcheng/pi-kit
+pi install /Users/pcheng/dev/pi-kit
 ```
 
 Then reload Pi:
