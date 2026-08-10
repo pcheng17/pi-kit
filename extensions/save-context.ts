@@ -2,7 +2,7 @@ import { uuidv7 } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
-import { basename, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 
 const VaultArtifacts = join(homedir(), "dev", "vault", "Artifacts");
 const StateDir = join(homedir(), ".pi", "agent", "state", "save-context");
@@ -103,9 +103,15 @@ async function writeOffset(path: string, offset: number): Promise<void> {
 }
 
 async function repoName(pi: ExtensionAPI, cwd: string): Promise<string> {
-	const result = await pi.exec("git", ["-C", cwd, "rev-parse", "--show-toplevel"]);
+	const result = await pi.exec("git", [
+		"-C",
+		cwd,
+		"rev-parse",
+		"--path-format=absolute",
+		"--git-common-dir",
+	]);
 	if (result.code !== 0 || !result.stdout.trim()) return "misc";
-	return basename(result.stdout.trim());
+	return basename(dirname(result.stdout.trim()));
 }
 
 function summaryPrompt(transcript: string): string {
