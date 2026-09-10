@@ -6,7 +6,8 @@ Personal Pi extensions, skills, and subagents.
 
 - `extensions/` - Pi TypeScript extensions, including automatic session context summaries.
 - `skills/` - Pi skills.
-- `agents/` - Subagent prompts used by the bundled `subagent` extension.
+- `agents/` - Custom agent prompts exposed to the `pi-subagents` package.
+- `pi-subagents` - Third-party subagent extension, loaded from `node_modules`.
 - `pi-mcp-adapter` - Bundled Pi MCP extension, loaded from `node_modules`.
 
 ## Install locally
@@ -33,7 +34,7 @@ After cloning this repo on a new machine, run `npm install` here before `pi inst
 /skill:code-review review branch main...HEAD
 ```
 
-The code review skill uses the `subagent` extension to run focused review agents with isolated context:
+The code review skill uses `pi-subagents` to run focused review agents with isolated context:
 
 - `review-correctness`
 - `review-security`

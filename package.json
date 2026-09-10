@@ -10,14 +10,24 @@
     "extensions": [
       "./extensions/*.ts",
       "./extensions/*/index.ts",
+      "./node_modules/pi-subagents/index.ts",
       "./node_modules/@juicesharp/rpiv-ask-user-question/index.ts",
       "./node_modules/@juicesharp/rpiv-btw/index.ts",
       "./node_modules/@juicesharp/rpiv-todo/index.ts",
       "./node_modules/pi-mcp-adapter/index.ts"
     ],
     "skills": [
-      "./skills"
-    ]
+      "./skills",
+      "./node_modules/pi-subagents/skills"
+    ],
+    "prompts": [
+      "./node_modules/pi-subagents/prompts"
+    ],
+    "subagents": {
+      "agents": [
+        "./agents"
+      ]
+    }
   },
   "peerDependencies": {
     "@earendil-works/pi-agent-core": "*",
@@ -30,7 +40,8 @@
     "@juicesharp/rpiv-ask-user-question": "^1.13.0",
     "@juicesharp/rpiv-btw": "^1.13.0",
     "@juicesharp/rpiv-todo": "^1.13.0",
-    "pi-mcp-adapter": "^2.32.1"
+    "pi-mcp-adapter": "^2.32.1",
+    "pi-subagents": "0.67.0"
   },
   "devDependencies": {
     "@earendil-works/pi-ai": "^0.84.4"
