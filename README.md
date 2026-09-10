@@ -13,8 +13,10 @@ Personal Pi extensions, skills, and subagents.
 ## Install locally
 
 ```bash
-pi install /Users/pcheng/dev/pi-kit
+/path/to/pi-kit/scripts/install.sh
 ```
+
+The installer installs locked dependencies, registers this checkout with Pi, and links the global Pi instructions. It is safe to rerun. If an existing `~/.pi/agent/AGENTS.md` differs from pi-kit's canonical instructions, reconcile it manually before running the installer.
 
 Then reload Pi:
 
@@ -23,8 +25,6 @@ Then reload Pi:
 ```
 
 Local package installs reference this directory in `~/.pi/agent/settings.json`; files are not copied. New skills/extensions are picked up after `/reload`.
-
-After cloning this repo on a new machine, run `npm install` here before `pi install /path/to/pi-kit` so bundled `node_modules` extensions such as `pi-mcp-adapter` are available.
 
 ## Code review workflow
 
