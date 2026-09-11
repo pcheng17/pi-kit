@@ -1,10 +1,5 @@
 # Global Agent Instructions
 
-## Installing dependencies
-
-- `~/.vps-dotfiles/install` is an idempotent script used to install dependencies and tools you may need for development.
-- If you discover that you need a new dependency or tool, instead of installing it on the fly, edit `~/.vps-dotfiles/install` to idempotently install the new requirement, and run the script.
-
 ## Tone and style
 
 - Never use the word "honest" in phrases like "here's my honest review" or "here's honest feedback" - it adds no meaning and reads as filler.
