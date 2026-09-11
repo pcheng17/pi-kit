@@ -4,7 +4,6 @@ Personal Pi extensions, skills, and subagents.
 
 ## Contents
 
-- `extensions/` - Pi TypeScript extensions, including automatic session context summaries.
 - `skills/` - Pi skills.
 - `agents/` - Custom agent prompts exposed to the `pi-subagents` package.
 - `pi-subagents` - Third-party subagent extension, loaded from `node_modules`.
