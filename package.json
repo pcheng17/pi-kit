@@ -15,7 +15,6 @@
       "./node_modules/pi-mcp-adapter/index.ts"
     ],
     "skills": [
-      "./skills",
       "./node_modules/pi-subagents/skills"
     ],
     "prompts": [
